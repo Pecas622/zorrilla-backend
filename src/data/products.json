@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "title": "Mate Imperial",
+    "description": "Mate de cuero premium",
+    "code": "MAT001",
+    "price": 15000,
+    "status": true,
+    "stock": 20,
+    "category": "Mates",
+    "thumbnails": [
+      "/img/mate-imperial.jpg"
+    ]
+  }
+]
