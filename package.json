@@ -1,16 +1,23 @@
 {
-  "name": "primera-entrega-backend",
+  "name": "segunda-entrega",
   "version": "1.0.0",
-  "type": "module",
+  "description": "Aplicacion de gestion de productos en tiempo real con Express, Handlebars y Socket.IO",
   "main": "src/app.js",
+  "type": "module",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "node --watch src/app.js"
   },
+  "keywords": [
+    "express",
+    "socket.io",
+    "handlebars"
+  ],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
+    "express": "^4.19.2",
+    "express-handlebars": "^7.1.2",
+    "socket.io": "^4.7.5"
   }
 }

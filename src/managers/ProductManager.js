@@ -1,71 +1,98 @@
 import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const DEFAULT_PATH = path.join(__dirname, "..", "data", "products.json");
 
 export default class ProductManager {
-    constructor(path) {
-        this.path = path;
+  constructor(filePath = DEFAULT_PATH) {
+    this.path = filePath;
+  }
+
+  async #readFile() {
+    try {
+      const data = await fs.readFile(this.path, "utf-8");
+      return JSON.parse(data);
+    } catch (error) {
+      if (error.code === "ENOENT") return [];
+      throw error;
+    }
+  }
+
+  async #writeFile(products) {
+    await fs.writeFile(this.path, JSON.stringify(products, null, 2), "utf-8");
+  }
+
+  async getProducts() {
+    return this.#readFile();
+  }
+
+  async getProductById(id) {
+    const products = await this.#readFile();
+    const product = products.find((p) => p.id === Number(id));
+    return product || null;
+  }
+
+  async addProduct(productData) {
+    const {
+      title,
+      description,
+      code,
+      price,
+      stock,
+      category,
+      status = true,
+      thumbnails = [],
+    } = productData;
+
+    if (
+      !title ||
+      !description ||
+      !code ||
+      price === undefined ||
+      stock === undefined ||
+      !category
+    ) {
+      throw new Error("Faltan campos obligatorios para crear el producto");
     }
 
-    async getProducts() {
-        const data = await fs.readFile(this.path, "utf-8");
-        return JSON.parse(data);
+    const products = await this.#readFile();
+
+    const newId =
+      products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 1;
+
+    const newProduct = {
+      id: newId,
+      title,
+      description,
+      code,
+      price: Number(price),
+      stock: Number(stock),
+      category,
+      status: Boolean(status),
+      thumbnails: Array.isArray(thumbnails) ? thumbnails : [],
+    };
+
+    products.push(newProduct);
+    await this.#writeFile(products);
+
+    return newProduct;
+  }
+
+  async deleteProduct(id) {
+    const products = await this.#readFile();
+    const index = products.findIndex((p) => p.id === Number(id));
+
+    if (index === -1) {
+      throw new Error(`Producto con id ${id} no encontrado`);
     }
 
-    async getProductById(id) {
-        const products = await this.getProducts();
-        return products.find((p) => p.id === Number(id));
-    }
+    const [deleted] = products.splice(index, 1);
+    await this.#writeFile(products);
 
-    async addProduct(product) {
-        const products = await this.getProducts();
-
-        const newProduct = {
-            id: products.length ? products[products.length - 1].id + 1 : 1,
-            ...product,
-        };
-
-        products.push(newProduct);
-
-        await fs.writeFile(
-            this.path,
-            JSON.stringify(products, null, 2)
-        );
-
-        return newProduct;
-    }
-
-    async updateProduct(id, data) {
-        const products = await this.getProducts();
-
-        const index = products.findIndex(
-            (p) => p.id === Number(id)
-        );
-
-        if (index === -1) return null;
-
-        products[index] = {
-            ...products[index],
-            ...data,
-            id: products[index].id,
-        };
-
-        await fs.writeFile(
-            this.path,
-            JSON.stringify(products, null, 2)
-        );
-
-        return products[index];
-    }
-
-    async deleteProduct(id) {
-        const products = await this.getProducts();
-
-        const filtered = products.filter(
-            (p) => p.id !== Number(id)
-        );
-
-        await fs.writeFile(
-            this.path,
-            JSON.stringify(filtered, null, 2)
-        );
-    }
+    return deleted;
+  }
 }

@@ -1,0 +1,23 @@
+<h2>Lista de Productos</h2>
+
+{{#if error}}
+  <p class="error">{{error}}</p>
+{{/if}}
+
+<div class="product-list">
+  {{#if products.length}}
+    {{#each products}}
+      <div class="product-card">
+        <h3>{{this.title}}</h3>
+        <p>{{this.description}}</p>
+        <p><strong>Codigo:</strong> {{this.code}}</p>
+        <p><strong>Precio:</strong> ${{this.price}}</p>
+        <p><strong>Stock:</strong> {{this.stock}}</p>
+        <p><strong>Categoria:</strong> {{this.category}}</p>
+        <p><strong>Estado:</strong> {{#if this.status}}Activo{{else}}Inactivo{{/if}}</p>
+      </div>
+    {{/each}}
+  {{else}}
+    <p>No hay productos disponibles.</p>
+  {{/if}}
+</div>

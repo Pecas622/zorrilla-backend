@@ -1,15 +1,35 @@
 [
   {
     "id": 1,
-    "title": "Mate Imperial",
-    "description": "Mate de cuero premium",
-    "code": "MAT001",
-    "price": 15000,
+    "title": "Auriculares Inalambricos",
+    "description": "Auriculares bluetooth con cancelacion de ruido",
+    "code": "AUR001",
+    "price": 25999,
+    "stock": 15,
+    "category": "Audio",
     "status": true,
+    "thumbnails": []
+  },
+  {
+    "id": 2,
+    "title": "Teclado Mecanico",
+    "description": "Teclado mecanico retroiluminado RGB",
+    "code": "TEC002",
+    "price": 34999,
+    "stock": 8,
+    "category": "Perifericos",
+    "status": true,
+    "thumbnails": []
+  },
+  {
+    "id": 3,
+    "title": "Mouse Gamer",
+    "description": "Mouse optico de alta precision con 6 botones",
+    "code": "MOU003",
+    "price": 15999,
     "stock": 20,
-    "category": "Mates",
-    "thumbnails": [
-      "/img/mate-imperial.jpg"
-    ]
+    "category": "Perifericos",
+    "status": true,
+    "thumbnails": []
   }
 ]
